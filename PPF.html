@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      color: white;
+    }
+
+    #ppf {
+      display: block;
+      margin: 0 auto;
+      border: 3px solid black;
+    }
+
+    .label {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      fill: white;
+    }
+
+    .ceteris-paribus {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+      animation: colorAnimation 0.5s infinite;
+    }
+
+    @keyframes colorAnimation {
+      40% { color: aqua; }
+      30% { color: yellow; }
+      30% { color: blue; }
+    }
+
+    h1 {
+      text-align: center;
+      text-transform: capitalize;
+      animation: colorAnimation 0.5s infinite;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .input-container input {
+      width: 200px;
+      padding: 5px;
+    }
+
+    .draw-button {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .draw-button button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: aqua;
+      color: black;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .draw-button button:hover {
+      background-color: lightcyan;
+      transform: translateY(2px);
+    }
+
+    .draw-button button:active {
+      transform: translateY(4px);
+      background-color: cyan;
+    }
+  </style>
+</head>
+<body>
+  <h1>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR:</h1>
+  <div class="input-container">
+    <label for="quantity-a">QUANTITY OF GOOD A:</label>
+    <input type="number" id="quantity-a" max="350">
+  </div>
+  <div class="input-container">
+    <label for="quantity-b">QUANTITY OF GOOD B:</label>
+    <input type="number" id="quantity-b" max="350">
+  </div>
+  <div class="draw-button">
+    <button onclick="drawCurve()">PLOT PP</button>
+  </div>
+  <svg id="ppf" width="800" height="600"></svg>
+  <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">CETERIS PARIBUS</div>
+
+  <script>
+    // Define the data points for the PPF curve
+    var ppfData = [
+      { x: 50, y: 500 },
+      { x: 150, y: 400 },
+      { x: 250, y: 325 },
+      { x: 350, y: 275 },
+      { x: 450, y: 240 },
+      { x: 550, y: 220 }
+    ];
+
+    // Get the SVG element
+    var svg = document.getElementById('ppf');
+
+    // Draw the axes
+    var axes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    // X-axis
+    var xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    xAxis.setAttribute('x1', '50');
+    xAxis.setAttribute('y1', '550');
+    xAxis.setAttribute('x2', '750');
+    xAxis.setAttribute('y2', '550');
+    xAxis.setAttribute('stroke', 'aqua');
+    axes.appendChild(xAxis);
+
+    // Y-axis
+    var yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    yAxis.setAttribute('x1', '50');
+    yAxis.setAttribute('y1', '550');
+    yAxis.setAttribute('x2', '50');
+    yAxis.setAttribute('y2', '20');
+    yAxis.setAttribute('stroke', 'aqua');
+    axes.appendChild(yAxis);
+
+    // Label for GOOD A
+    var goodALabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    goodALabel.setAttribute('class', 'label');
+    goodALabel.setAttribute('x', '780');
+    goodALabel.setAttribute('y', '600');
+    goodALabel.setAttribute('text-anchor', 'end');
+    goodALabel.textContent = 'GOOD A';
+    axes.appendChild(goodALabel);
+
+    // Label for GOOD B
+    var goodBLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    goodBLabel.setAttribute('class', 'label');
+    goodBLabel.setAttribute('x', '80');
+    goodBLabel.setAttribute('y', '10');
+    goodBLabel.setAttribute('text-anchor', 'end');
+    goodBLabel.textContent = 'GOOD B';
+    axes.appendChild(goodBLabel);
+
+    svg.appendChild(axes);
+
+    // Function to draw the PPF curve
+    function drawCurve() {
+      var quantityA = parseInt(document.getElementById('quantity-a').value);
+      var quantityB = parseInt(document.getElementById('quantity-b').value);
+
+      if (isNaN(quantityA) || isNaN(quantityB)) {
+        alert('Please enter valid quantities for Good A and Good B.');
+        return;
+      }
+
+      if (quantityA > 350 || quantityB > 350) {
+        alert('Values cannot exceed 350.');
+        return;
+      }
+
+      var scaleFactorX = (750 - 50) / 350;
+      var scaleFactorY = (550 - 20) / 350;
+
+      // Clear previous curve, tick marks, lines, and labels
+      axes.innerHTML = '';
+      
+      // Redraw the axes
+      axes.appendChild(xAxis);
+      axes.appendChild(yAxis);
+      axes.appendChild(goodALabel);
+      axes.appendChild(goodBLabel);
+
+      // Create the path for the curve
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var pathPoints = [];
+
+      for (var i = 0; i < ppfData.length; i++) {
+        var x = 50 + (ppfData[i].x * scaleFactorX);
+        var y = 550 - (ppfData[i].y * scaleFactorY);
+        pathPoints.push(x + ',' + y);
+      }
+
+      var curve = 'M' + pathPoints.join(' L');
+
+      path.setAttribute('d', curve);
+      path.setAttribute('stroke', 'black'); // Set the line color to black
+      path.setAttribute('fill', 'none');
+      axes.appendChild(path);
+
+      // Add tick marks on the axes
+      for (var j = 0; j <= 350; j += 50) {
+        var tickX = 50 + (j * scaleFactorX);
+        var tickY = 550 - (j * scaleFactorY);
+
+        var tickMarkX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        tickMarkX.setAttribute('x1', tickX);
+        tickMarkX.setAttribute('y1', '550');
+        tickMarkX.setAttribute('x2', tickX);
+        tickMarkX.setAttribute('y2', '560');
+        tickMarkX.setAttribute('stroke', 'aqua');
+        axes.appendChild(tickMarkX);
+
+        var tickMarkY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        tickMarkY.setAttribute('x1', '50');
+        tickMarkY.setAttribute('y1', tickY);
+        tickMarkY.setAttribute('x2', '40');
+        tickMarkY.setAttribute('y2', tickY);
+        tickMarkY.setAttribute('stroke', 'aqua');
+        axes.appendChild(tickMarkY);
+
+        var tickLabelX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tickLabelX.setAttribute('class', 'label');
+        tickLabelX.setAttribute('x', tickX);
+        tickLabelX.setAttribute('y', '580');
+        tickLabelX.setAttribute('text-anchor', 'middle');
+        tickLabelX.textContent = j.toString();
+        axes.appendChild(tickLabelX);
+
+        var tickLabelY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tickLabelY.setAttribute('class', 'label');
+        tickLabelY.setAttribute('x', '30');
+        tickLabelY.setAttribute('y', tickY + 5);
+        tickLabelY.setAttribute('text-anchor', 'end');
+        tickLabelY.textContent = j.toString();
+        axes.appendChild(tickLabelY);
+      }
+
+      // Plot the input values as a dot on the graph
+      var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', 50 + (quantityA * scaleFactorX));
+      dot.setAttribute('cy', 550 - (quantityB * scaleFactorY));
+      dot.setAttribute('r', '5');
+      var dotColor = getDotColor(quantityA, quantityB);
+      dot.setAttribute('fill', dotColor);
+      axes.appendChild(dot);
+    }
+    
+    // Function to determine the color of the dot based on quantity values
+    function getDotColor(quantityA, quantityB) {
+      if (quantityA === 200 && quantityB === 200) {
+        return 'blue';
+      } else if (quantityA > 200 && quantityB > 200) {
+        return 'aqua';
+      } else {
+        return 'red';
+      }
+    }
+  </script>
+</body>
+</html>
