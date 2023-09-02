@@ -81,8 +81,13 @@
       background-color: aqua;
     }
 
-    /* Added CSS for graph lines */
-    .grid-line {
+    /* Added CSS for grid lines */
+    .grid-line-x {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-dasharray: 5, 5; /* Dotted lines */
+    }
+
+    .grid-line-y {
       stroke: rgba(255, 255, 255, 0.2);
       stroke-dasharray: 5, 5; /* Dotted lines */
     }
@@ -108,8 +113,8 @@
     // Define the data points for the PPF curve
     var ppfData = [
       { x: 0, y: 20 },
-      { x: 350, y: 20 },
-      { x: 350, y: 0 }, 
+      { x: 350, y: 20 }, // Changed to make the curve straight from (200, 200)
+      { x: 350, y: 0 },  // Changed to make the curve straight from (200, 200)
     ];
 
     // Get the SVG element
@@ -141,13 +146,13 @@
       var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 
-      gridLineX.setAttribute('class', 'grid-line');
-      gridLineY.setAttribute('class', 'grid-line');
+      gridLineX.setAttribute('class', 'grid-line-x');
+      gridLineY.setAttribute('class', 'grid-line-y');
 
       gridLineX.setAttribute('x1', 50 + i);
-      gridLineX.setAttribute('y1', '550');
+      gridLineX.setAttribute('y1', '20');
       gridLineX.setAttribute('x2', 50 + i);
-      gridLineX.setAttribute('y2', '20');
+      gridLineX.setAttribute('y2', '550');
 
       gridLineY.setAttribute('x1', '50');
       gridLineY.setAttribute('y1', 550 - i);
@@ -196,6 +201,9 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
+      // Clear previous curve, tick marks, lines, and labels
+      axes.innerHTML = '';
+
       // Redraw the axes and grid lines
       axes.appendChild(xAxis);
       axes.appendChild(yAxis);
@@ -207,13 +215,13 @@
         var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 
-        gridLineX.setAttribute('class', 'grid-line');
-        gridLineY.setAttribute('class', 'grid-line');
+        gridLineX.setAttribute('class', 'grid-line-x');
+        gridLineY.setAttribute('class', 'grid-line-y');
 
         gridLineX.setAttribute('x1', 50 + i);
-        gridLineX.setAttribute('y1', '550');
+        gridLineX.setAttribute('y1', '20');
         gridLineX.setAttribute('x2', 50 + i);
-        gridLineX.setAttribute('y2', '20');
+        gridLineX.setAttribute('y2', '550');
 
         gridLineY.setAttribute('x1', '50');
         gridLineY.setAttribute('y1', 550 - i);
@@ -237,7 +245,7 @@
       var curve = 'M' + pathPoints.join(' L');
 
       path.setAttribute('d', curve);
-      path.setAttribute('stroke', 'lightblue');
+      path.setAttribute('stroke', 'yellow');
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
 
