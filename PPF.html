@@ -200,7 +200,7 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
-      // Clear previous curve, tick marks, lines, and labels
+      // Clear previous curve, lines, and labels
       axes.innerHTML = '';
 
       // Redraw the axes and grid lines
@@ -248,44 +248,6 @@
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
 
-      // Add tick marks on the axes
-      for (var j = 0; j <= 350; j += 50) {
-        var tickX = 50 + (j * scaleFactorX);
-        var tickY = 550 - (j * scaleFactorY);
-
-        var tickMarkX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        tickMarkX.setAttribute('x1', tickX);
-        tickMarkX.setAttribute('y1', '550');
-        tickMarkX.setAttribute('x2', tickX);
-        tickMarkX.setAttribute('y2', '560');
-        tickMarkX.setAttribute('stroke', 'aqua');
-        axes.appendChild(tickMarkX);
-
-        var tickMarkY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        tickMarkY.setAttribute('x1', '50');
-        tickMarkY.setAttribute('y1', tickY);
-        tickMarkY.setAttribute('x2', '40');
-        tickMarkY.setAttribute('y2', tickY);
-        tickMarkY.setAttribute('stroke', 'aqua');
-        axes.appendChild(tickMarkY);
-
-        var tickLabelX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        tickLabelX.setAttribute('class', 'label');
-        tickLabelX.setAttribute('x', tickX);
-        tickLabelX.setAttribute('y', '580');
-        tickLabelX.setAttribute('text-anchor', 'middle');
-        tickLabelX.textContent = j.toString();
-        axes.appendChild(tickLabelX);
-
-        var tickLabelY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        tickLabelY.setAttribute('class', 'label');
-        tickLabelY.setAttribute('x', '30');
-        tickLabelY.setAttribute('y', tickY + 5);
-        tickLabelY.setAttribute('text-anchor', 'end');
-        tickLabelY.textContent = j.toString();
-        axes.appendChild(tickLabelY);
-      }
-
       // Plot the input values as a dot on the graph
       var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       dot.setAttribute('cx', 50 + (quantityA * scaleFactorX));
@@ -298,12 +260,14 @@
 
     // Function to determine the color of the dot based on quantity values
     function getDotColor(quantityA, quantityB) {
-      if (quantityA === 200 && quantityB === 200) {
-        return 'blue';
-      } else if (quantityA > 200 && quantityB > 200) {
-        return 'aqua';
-      } else {
+      var curveY = 200 - (quantityA / 2); // Calculate the curve Y-coordinate based on quantityA
+
+      if (quantityB < curveY) {
         return 'red';
+      } else if (quantityB === curveY) {
+        return 'blue';
+      } else {
+        return 'aqua';
       }
     }
   </script>
