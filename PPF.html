@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
   <title>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR</title>
@@ -81,6 +80,12 @@
       transform: translateY(4px);
       background-color: aqua;
     }
+
+    /* Added CSS for graph lines */
+    .grid-line {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-dasharray: 5, 5; /* Dotted lines */
+    }
   </style>
 </head>
 <body>
@@ -103,14 +108,14 @@
     // Define the data points for the PPF curve
     var ppfData = [
       { x: 0, y: 20 },
-      { x: 40, y: 60 },
-      { x: 80, y: 100 },
+      { x: 350, y: 20 }, // Changed to make the curve straight from (200, 200)
+      { x: 350, y: 0 },  // Changed to make the curve straight from (200, 200)
     ];
 
     // Get the SVG element
     var svg = document.getElementById('ppf');
 
-    // Draw the axes
+    // Draw the axes and grid lines
     var axes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
     // X-axis
@@ -130,6 +135,28 @@
     yAxis.setAttribute('y2', '20');
     yAxis.setAttribute('stroke', 'aqua');
     axes.appendChild(yAxis);
+
+    // Add grid lines
+    for (var i = 0; i <= 350; i += 50) {
+      var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+      gridLineX.setAttribute('class', 'grid-line');
+      gridLineY.setAttribute('class', 'grid-line');
+
+      gridLineX.setAttribute('x1', 50 + i);
+      gridLineX.setAttribute('y1', '550');
+      gridLineX.setAttribute('x2', 50 + i);
+      gridLineX.setAttribute('y2', '20');
+
+      gridLineY.setAttribute('x1', '50');
+      gridLineY.setAttribute('y1', 550 - i);
+      gridLineY.setAttribute('x2', '750');
+      gridLineY.setAttribute('y2', 550 - i);
+
+      axes.appendChild(gridLineX);
+      axes.appendChild(gridLineY);
+    }
 
     // Label for GOOD A
     var goodALabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -171,12 +198,34 @@
 
       // Clear previous curve, tick marks, lines, and labels
       axes.innerHTML = '';
-      
-      // Redraw the axes
+
+      // Redraw the axes and grid lines
       axes.appendChild(xAxis);
       axes.appendChild(yAxis);
       axes.appendChild(goodALabel);
       axes.appendChild(goodBLabel);
+
+      // Add grid lines
+      for (var i = 0; i <= 350; i += 50) {
+        var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+        gridLineX.setAttribute('class', 'grid-line');
+        gridLineY.setAttribute('class', 'grid-line');
+
+        gridLineX.setAttribute('x1', 50 + i);
+        gridLineX.setAttribute('y1', '550');
+        gridLineX.setAttribute('x2', 50 + i);
+        gridLineX.setAttribute('y2', '20');
+
+        gridLineY.setAttribute('x1', '50');
+        gridLineY.setAttribute('y1', 550 - i);
+        gridLineY.setAttribute('x2', '750');
+        gridLineY.setAttribute('y2', 550 - i);
+
+        axes.appendChild(gridLineX);
+        axes.appendChild(gridLineY);
+      }
 
       // Create the path for the curve
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -242,7 +291,7 @@
       dot.setAttribute('fill', dotColor);
       axes.appendChild(dot);
     }
-    
+
     // Function to determine the color of the dot based on quantity values
     function getDotColor(quantityA, quantityB) {
       if (quantityA === 200 && quantityB === 200) {
