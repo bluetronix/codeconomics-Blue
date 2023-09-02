@@ -104,18 +104,12 @@
     <input type="number" id="quantity-b" max="350">
   </div>
   <div class="draw-button">
-    <button onclick="drawCurve()">PLOT PP</button>
+    <button onclick="drawDot()">PLOT DOT</button>
   </div>
   <svg id="ppf" width="800" height="600"></svg>
   <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">CETERIS PARIBUS</div>
 
   <script>
-    // Define the data points for the PPF curve
-    var ppfData = [
-      { x: 0, y: 200 },
-      { x: 200, y: 0 }
-    ];
-
     // Get the SVG element
     var svg = document.getElementById('ppf');
 
@@ -182,8 +176,8 @@
 
     svg.appendChild(axes);
 
-    // Function to draw the PPF curve
-    function drawCurve() {
+    // Function to draw the dot
+    function drawDot() {
       var quantityA = parseInt(document.getElementById('quantity-a').value);
       var quantityB = parseInt(document.getElementById('quantity-b').value);
 
@@ -200,56 +194,15 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
-      // Clear previous curve, lines, and labels
-      axes.innerHTML = '';
-
-      // Redraw the axes and grid lines
-      axes.appendChild(xAxis);
-      axes.appendChild(yAxis);
-      axes.appendChild(goodALabel);
-      axes.appendChild(goodBLabel);
-
-      // Add grid lines
-      for (var i = 0; i <= 350; i += 50) {
-        var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-
-        gridLineX.setAttribute('class', 'grid-line-x');
-        gridLineY.setAttribute('class', 'grid-line-y');
-
-        gridLineX.setAttribute('x1', 50 + i);
-        gridLineX.setAttribute('y1', '20');
-        gridLineX.setAttribute('x2', 50 + i);
-        gridLineX.setAttribute('y2', '550');
-
-        gridLineY.setAttribute('x1', '50');
-        gridLineY.setAttribute('y1', 550 - i);
-        gridLineY.setAttribute('x2', '750');
-        gridLineY.setAttribute('y2', 550 - i);
-
-        axes.appendChild(gridLineX);
-        axes.appendChild(gridLineY);
+      // Clear previous dot
+      var existingDot = document.getElementById('dot');
+      if (existingDot) {
+        existingDot.remove();
       }
 
-      // Create the path for the curve
-      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      var pathPoints = [];
-
-      for (var i = 0; i < ppfData.length; i++) {
-        var x = 50 + (ppfData[i].x * scaleFactorX);
-        var y = 550 - (ppfData[i].y * scaleFactorY);
-        pathPoints.push(x + ',' + y);
-      }
-
-      var curve = 'M' + pathPoints.join(' L');
-
-      path.setAttribute('d', curve);
-      path.setAttribute('stroke', 'aqua');
-      path.setAttribute('fill', 'none');
-      axes.appendChild(path);
-
-      // Plot the input values as a dot on the graph
+      // Create the dot
       var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('id', 'dot');
       dot.setAttribute('cx', 50 + (quantityA * scaleFactorX));
       dot.setAttribute('cy', 550 - (quantityB * scaleFactorY));
       dot.setAttribute('r', '5');
