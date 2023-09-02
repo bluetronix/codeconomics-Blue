@@ -108,8 +108,8 @@
     // Define the data points for the PPF curve
     var ppfData = [
       { x: 0, y: 20 },
-      { x: 350, y: 20 }, // Changed to make the curve straight from (200, 200)
-      { x: 350, y: 0 },  // Changed to make the curve straight from (200, 200)
+      { x: 350, y: 20 },
+      { x: 350, y: 0 }, 
     ];
 
     // Get the SVG element
@@ -196,9 +196,6 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
-      // Clear previous curve, tick marks, lines, and labels
-      axes.innerHTML = '';
-
       // Redraw the axes and grid lines
       axes.appendChild(xAxis);
       axes.appendChild(yAxis);
@@ -240,7 +237,7 @@
       var curve = 'M' + pathPoints.join(' L');
 
       path.setAttribute('d', curve);
-      path.setAttribute('stroke', 'yellow');
+      path.setAttribute('stroke', 'lightblue');
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
 
