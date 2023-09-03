@@ -24,7 +24,7 @@
     .ceteris-paribus {
       text-align: center;
       font-family: Arial, sans-serif;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       margin-top: 10px;
       animation: colorAnimation 0.5s infinite;
@@ -40,6 +40,7 @@
       text-align: center;
       text-transform: capitalize;
       animation: colorAnimation 0.5s infinite;
+      text-decoration: underline;
     }
 
     .input-container {
@@ -62,34 +63,37 @@
     }
 
     .draw-button button {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 5px 10px;
+      font-size: 25px;
+      font-family: 'Times New Roman';
       background-color: blue;
-      color: black;
+      color:white;
       border: none;
       cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      border-radius: 300rem;
+      transition: transform 0.5s ease, background-color 0.5s ease;
     }
 
     .draw-button button:hover {
       background-color: aqua;
-      transform: translateY(2px);
+      transform: translateY(5px);
     }
 
     .draw-button button:active {
-      transform: translateY(4px);
-      background-color: aqua;
+      transform: translateY(5px);
+      background-color: cyan;
     }
 
-    /* Added CSS for grid lines */
     .grid-line-x {
-      stroke: rgba(255, 255, 255, 0.2);
-      stroke-dasharray: 5, 5; /* Dotted lines */
+      stroke: white;
+      stroke-dasharray: 5, 5; 
+      display: none; 
     }
 
     .grid-line-y {
-      stroke: rgba(255, 255, 255, 0.2);
-      stroke-dasharray: 5, 5; /* Dotted lines */
+      stroke: white;
+      stroke-dasharray: 5, 5; 
+      display: none; 
     }
   </style>
 </head>
@@ -97,19 +101,25 @@
   <h1>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR:</h1>
   <div class="input-container">
     <label for="quantity-a">QUANTITY OF GOOD A:</label>
-    <input type="number" id="quantity-a" max="350">
+    <input type="number" id="quantity-a" max="350" placeholder="(max 350)">
   </div>
   <div class="input-container">
     <label for="quantity-b">QUANTITY OF GOOD B:</label>
-    <input type="number" id="quantity-b" max="350">
+    <input type="number" id="quantity-b" max="350" placeholder="(max 350)">
   </div>
   <div class="draw-button">
-    <button onclick="drawDot()">PLOT DOT</button>
+    <button onclick="drawCurve()">PLOT PP</button>
   </div>
   <svg id="ppf" width="800" height="600"></svg>
-  <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">CETERIS PARIBUS</div>
+  <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">[CETERIS PARIBUS]</div>
 
   <script>
+    // Define the data points for the PPF curve
+    var ppfData = [
+      { x: 0, y: 250 },
+      { x: 250, y: 0 },  
+    ];
+
     // Get the SVG element
     var svg = document.getElementById('ppf');
 
@@ -134,28 +144,6 @@
     yAxis.setAttribute('stroke', 'aqua');
     axes.appendChild(yAxis);
 
-    // Add grid lines
-    for (var i = 0; i <= 350; i += 50) {
-      var gridLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      var gridLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-
-      gridLineX.setAttribute('class', 'grid-line-x');
-      gridLineY.setAttribute('class', 'grid-line-y');
-
-      gridLineX.setAttribute('x1', 50 + i);
-      gridLineX.setAttribute('y1', '20');
-      gridLineX.setAttribute('x2', 50 + i);
-      gridLineX.setAttribute('y2', '550');
-
-      gridLineY.setAttribute('x1', '50');
-      gridLineY.setAttribute('y1', 550 - i);
-      gridLineY.setAttribute('x2', '750');
-      gridLineY.setAttribute('y2', 550 - i);
-
-      axes.appendChild(gridLineX);
-      axes.appendChild(gridLineY);
-    }
-
     // Label for GOOD A
     var goodALabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     goodALabel.setAttribute('class', 'label');
@@ -176,8 +164,8 @@
 
     svg.appendChild(axes);
 
-    // Function to draw the dot
-    function drawDot() {
+    // Function to draw the PPF curve and intersection lines
+    function drawCurve() {
       var quantityA = parseInt(document.getElementById('quantity-a').value);
       var quantityB = parseInt(document.getElementById('quantity-b').value);
 
@@ -194,35 +182,144 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
-      // Clear previous dot
-      var existingDot = document.getElementById('dot');
-      if (existingDot) {
-        existingDot.remove();
+      // Redraw the axes and grid lines
+      axes.appendChild(xAxis);
+      axes.appendChild(yAxis);
+      axes.appendChild(goodALabel);
+      axes.appendChild(goodBLabel);
+
+      // Show grid lines
+      var gridLinesX = document.querySelectorAll('.grid-line-x');
+      var gridLinesY = document.querySelectorAll('.grid-line-y');
+
+      gridLinesX.forEach(function (line) {
+        line.style.display = 'block';
+      });
+
+      gridLinesY.forEach(function (line) {
+        line.style.display = 'block';
+      });
+
+      // Create the path for the curve
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var pathPoints = [];
+
+      for (var i = 0; i < ppfData.length; i++) {
+        var x = 50 + (ppfData[i].x * scaleFactorX);
+        var y = 550 - (ppfData[i].y * scaleFactorY);
+        pathPoints.push(x + ',' + y);
       }
 
-      // Create the dot
+      var curve = 'M' + pathPoints.join(' L');
+
+      path.setAttribute('d', curve);
+      path.setAttribute('stroke', 'aqua');
+      path.setAttribute('fill', 'none');
+      axes.appendChild(path);
+
+      // Add tick marks on the axes
+      for (var j = 0; j <= 350; j += 50) {
+        var tickX = 50 + (j * scaleFactorX);
+        var tickY = 550 - (j * scaleFactorY);
+
+        var tickMarkX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        tickMarkX.setAttribute('x1', tickX);
+        tickMarkX.setAttribute('y1', '550');
+        tickMarkX.setAttribute('x2', tickX);
+        tickMarkX.setAttribute('y2', '560');
+        tickMarkX.setAttribute('stroke', 'aqua');
+        axes.appendChild(tickMarkX);
+
+        var tickMarkY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        tickMarkY.setAttribute('x1', '50');
+        tickMarkY.setAttribute('y1', tickY);
+        tickMarkY.setAttribute('x2', '40');
+        tickMarkY.setAttribute('y2', tickY);
+        tickMarkY.setAttribute('stroke', 'aqua');
+        axes.appendChild(tickMarkY);
+
+        var tickLabelX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tickLabelX.setAttribute('class', 'label');
+        tickLabelX.setAttribute('x', tickX);
+        tickLabelX.setAttribute('y', '580');
+        tickLabelX.setAttribute('text-anchor', 'middle');
+        tickLabelX.textContent = j.toString();
+        axes.appendChild(tickLabelX);
+
+        var tickLabelY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tickLabelY.setAttribute('class', 'label');
+        tickLabelY.setAttribute('x', '30');
+        tickLabelY.setAttribute('y', tickY + 5);
+        tickLabelY.setAttribute('text-anchor', 'end');
+        tickLabelY.textContent = j.toString();
+        axes.appendChild(tickLabelY);
+      }
+
+      // Plot the input values as a dot on the graph
+      var dotX = 50 + (quantityA * scaleFactorX);
+      var dotY = 550 - (quantityB * scaleFactorY);
+
       var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      dot.setAttribute('id', 'dot');
-      dot.setAttribute('cx', 50 + (quantityA * scaleFactorX));
-      dot.setAttribute('cy', 550 - (quantityB * scaleFactorY));
+      dot.setAttribute('cx', dotX);
+      dot.setAttribute('cy', dotY);
       dot.setAttribute('r', '5');
       var dotColor = getDotColor(quantityA, quantityB);
       dot.setAttribute('fill', dotColor);
       axes.appendChild(dot);
+
+      // Draw dotted lines to the intersection point
+      var intersectionLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      intersectionLineX.setAttribute('x1', dotX);
+      intersectionLineX.setAttribute('y1', dotY);
+      intersectionLineX.setAttribute('x2', dotX);
+      intersectionLineX.setAttribute('y2', '550');
+      intersectionLineX.setAttribute('stroke', 'white');
+      intersectionLineX.setAttribute('stroke-dasharray', '5, 5');
+      axes.appendChild(intersectionLineX);
+
+      var intersectionLineY = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      intersectionLineY.setAttribute('x1', dotX);
+      intersectionLineY.setAttribute('y1', dotY);
+      intersectionLineY.setAttribute('x2', '50');
+      intersectionLineY.setAttribute('y2', dotY);
+      intersectionLineY.setAttribute('stroke', 'white');
+      intersectionLineY.setAttribute('stroke-dasharray', '5, 5');
+      axes.appendChild(intersectionLineY);
     }
 
-    // Function to determine the color of the dot based on quantity values
-    function getDotColor(quantityA, quantityB) {
-      var curveY = 200 - (quantityA / 2); // Calculate the curve Y-coordinate based on quantityA
+   // Function to determine the dot color based on quantity values
+function getDotColor(quantityA, quantityB) {
+  var scaleFactorX = (750 - 50) / 350;
+  var scaleFactorY = (550 - 20) / 350;
+  var scaledQuantityA = 50 + (quantityA * scaleFactorX);
+  var scaledQuantityB = 550 - (quantityB * scaleFactorY);
 
-      if (quantityB < curveY) {
-        return 'red';
-      } else if (quantityB === curveY) {
-        return 'blue';
-      } else {
-        return 'aqua';
-      }
+  // Check if the dot is within or outside the PPF curve
+  for (var i = 0; i < ppfData.length - 1; i++) {
+    var x1 = 50 + (ppfData[i].x * scaleFactorX);
+    var y1 = 550 - (ppfData[i].y * scaleFactorY);
+    var x2 = 50 + (ppfData[i + 1].x * scaleFactorX);
+    var y2 = 550 - (ppfData[i + 1].y * scaleFactorY);
+
+    // Calculate the equation of the line segment between two PPF points
+    var ppfSlope = (y2 - y1) / (x2 - x1);
+    var ppfYIntercept = y1 - ppfSlope * x1;
+
+    // Calculate the expected quantity of Good B for the given quantity of Good A
+    var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
+
+    if (scaledQuantityB === expectedQuantityB) {
+      return 'blue'; // Point is on the PPF curve
     }
+
+    if (scaledQuantityB < expectedQuantityB) {
+      return 'aqua'; // Point is inside the PPF curve
+    }
+  }
+
+  // Dot is outside the PPF curve
+  return 'red';
+}
   </script>
 </body>
 </html>
