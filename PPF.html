@@ -309,16 +309,16 @@ function getDotColor(quantityA, quantityB) {
     var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
 
     if (scaledQuantityB === expectedQuantityB) {
-      return 'blue'; // Point is on the PPF curve
+      return 'aqua'; // Point is on the PPF curve
     }
 
     if (scaledQuantityB < expectedQuantityB) {
-      return 'aqua'; // Point is inside the PPF curve
+      return 'green'; // Point is inside the PPF curve
     }
   }
 
   // Dot is outside the PPF curve
-  return 'red';
+  return 'blue';
 }
   </script>
 </body>
