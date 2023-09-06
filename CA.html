@@ -1,37 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html> 
+  <title>MATIKO'S CASH ACCOUNT CALCULATOR:</title>
   <head>
-    <title>MATIKO'S CASH ACCOUNT CALCULATOR</title>
     <style>
+
       #table {
-        background-color: cyan;
+        background-color: black;
         color: blue;
         border-collapse: collapse;
-        width: 100%;
+        width: 20%;
       }
 
       #table td, #table th {
-    border: 3px solid lightgreen;
+    border: 2px solid aqua;
     padding: 8px;
   }
 
   #table th {
-    background-color:blue;
-    color: white;
+    background-color: #2a2a2a;
+    color: blue;
     text-align: left;
+    animation: coloranimation 100s infinite
   }
   h1{
-    animation: colorAnimation 0.5s infinite;
+    animation: colorAnimation 20s infinite;
+    text-decoration: underline;
+    font-size: 50px;
   }
     @keyframes colorAnimation {
-      40% { color: aqua; }
-      30% { color: yellow; }
-      30% { color: blue; }
+      0% { color: blue; }
+      25% { color: aqua; }
+      50% { color: blue; }
+      75% { color: aqua; }
+      100% { color: blue; }
+    }
+
+    .buttons {
+      margin-left: 50px;
+      margin-top: 30px;
+    }
+
+    .buttons button {
+      padding: 5px 10px;
+      font-size: 15px;
+      font-family: 'Times New Roman';
+      background-color: blue;
+      color:white;
+      border: none;
+      cursor: pointer;
+      border-radius: 300rem;
+      transition: transform 0.5s ease, background-color 0.5s ease;
+    }
+
+    .buttons button:hover {
+      background-color: aqua;
+      transform: translateY(5px);
+    }
+
+    .buttons button:active {
+      transform: translateY(5px);
+      background-color: cyan;
     }
 </style>
 </head>
-<body style="background-color:darkblue;">
-  <h1 style="color: aqua; text-align: center;">MATIKO'S CASH ACCOUNT CALCULATOR</h1>
+
+<body style="background-color: black;">
+  <h1 style="color: aqua; text-align: center;">MATIKO'S CASH ACCOUNT CALCULATOR:</h1>
   <table id="table">
     <thead>
       <tr>
@@ -60,11 +94,11 @@
         <td><input type="text"></td>
         <td><input type="text"></td>
         <td><input type="text"></td>
+        <td><input type="number"></td>
         <td><input type="text"></td>
         <td><input type="text"></td>
         <td><input type="text"></td>
-        <td><input type="text"></td>
-        <td><input type="text"></td>
+        <td><input type="number"></td>
       </tr>
     </tbody>
   </table>
@@ -81,20 +115,10 @@ function ADD_ROW() {
   }
 }
 </script>
-<br>
+<div class="buttons">
 <button onclick="ADD_ROW()">ADD ROW</button>
-
-<button onclick="clearTable()">CLEAR</button>
-
-<script>
-  function clearTable() {
-    var inputs = document.querySelectorAll("#table-body input");
-    for (var i = 0; i < inputs.length; i++) {
-      inputs[i].value = "";
-    }
-  }
-</script>
-  <button onclick="checkBalance()">CHECK BALANCE</button>
+<button onclick="checkBalance()">CHECK BALANCE</button>
+</div>
 
   <script>
     function checkBalance() {
@@ -117,6 +141,6 @@ function ADD_ROW() {
       document.getElementById("balance").innerHTML = "BALANCE = " + balance;
     }
   </script>
-  <div id="debit-total" style="color: aqua;font-size: larger; text-align: center;"></div>
-  <div id="credit-total" style="color: aqua;font-size: larger; text-align: center; "></div>
-  <div id="balance" style="color: aqua;font-size: larger; text-align: center;"></div>
+  <div id="debit-total" style="color: aqua;font-size: 30px; text-align: center; margin-top: 20px;"></div>
+  <div id="credit-total" style="color: aqua;font-size: 30px; text-align: center; margin-top: 20px;"></div>
+  <div id="balance" style="color: aqua;font-size: 30px; text-align: center; margin-top: 20px;"></div>
