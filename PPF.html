@@ -43,6 +43,7 @@
       text-transform: capitalize;
       animation: colorAnimation 5s infinite;
       text-decoration: underline;
+      font-size: 40px;
     }
 
     .input-container {
@@ -97,17 +98,30 @@
       stroke-dasharray: 5, 5; 
       display: none; 
     }
+
+    .breathing-dot {
+      animation: breathe 1s infinite alternate;
+    }
+
+    @keyframes breathe {
+     0% {
+      transform: scale(1);
+    }
+      100% {
+     transform: scale(1.2);
+    }
+    }
   </style>
 </head>
 <body>
   <h1>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR:</h1>
   <div class="input-container">
     <label for="quantity-a">QUANTITY OF GOOD A:</label>
-    <input type="number" id="quantity-a" max="350" placeholder="(max 350)">
+    <input type="number" id="quantity-a" max="350" placeholder="(max 1000)">
   </div>
   <div class="input-container">
     <label for="quantity-b">QUANTITY OF GOOD B:</label>
-    <input type="number" id="quantity-b" max="350" placeholder="(max 350)">
+    <input type="number" id="quantity-b" max="350" placeholder="(max 1000)">
   </div>
   <div class="draw-button">
     <button onclick="drawCurve()">PLOT PP</button>
@@ -116,11 +130,12 @@
   <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">[CETERIS PARIBUS]</div>
 
   <script>
+    
     var ppfData = [
-      { x: 0, y: 250 },
-      { x: 250, y: 0 },  
+      { x: 0, y: 850 },
+      { x: 850, y: 0 },  
     ];
-
+    
     var svg = document.getElementById('ppf');
 
     var axes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -168,13 +183,13 @@
         return;
       }
 
-      if (quantityA > 350 || quantityB > 350) {
+      if (quantityA > 1000 || quantityB > 1000) {
         alert('Values cannot exceed 350.');
         return;
       }
 
-      var scaleFactorX = (750 - 50) / 350;
-      var scaleFactorY = (550 - 20) / 350;
+      var scaleFactorX = (750 - 50) / 1000;
+      var scaleFactorY = (550 - 20) / 1000;
 
       axes.appendChild(xAxis);
       axes.appendChild(yAxis);
@@ -208,8 +223,7 @@
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
 
-      // Add tick marks on the axes
-      for (var j = 0; j <= 350; j += 50) {
+      for (var j = 0; j <= 1000; j += 50) {
         var tickX = 50 + (j * scaleFactorX);
         var tickY = 550 - (j * scaleFactorY);
 
@@ -245,7 +259,7 @@
         tickLabelY.textContent = j.toString();
         axes.appendChild(tickLabelY);
       }
-
+      
       var dotX = 50 + (quantityA * scaleFactorX);
       var dotY = 550 - (quantityB * scaleFactorY);
 
@@ -257,6 +271,14 @@
       dot.setAttribute('fill', dotColor);
       axes.appendChild(dot);
 
+  setInterval(function () {
+    if (dot.getAttribute('r') === '5') {
+      dot.setAttribute('r', '6');
+    } else {
+      dot.setAttribute('r', '5');
+    }
+  }, 1000);
+      
       var intersectionLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       intersectionLineX.setAttribute('x1', dotX);
       intersectionLineX.setAttribute('y1', dotY);
@@ -277,8 +299,8 @@
     }
 
 function getDotColor(quantityA, quantityB) {
-  var scaleFactorX = (750 - 50) / 350;
-  var scaleFactorY = (550 - 20) / 350;
+  var scaleFactorX = (750 - 50) / 1000;
+  var scaleFactorY = (550 - 20) / 1000;
   var scaledQuantityA = 50 + (quantityA * scaleFactorX);
   var scaledQuantityB = 550 - (quantityB * scaleFactorY);
 
@@ -294,16 +316,26 @@ function getDotColor(quantityA, quantityB) {
     var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
 
     if (scaledQuantityB === expectedQuantityB) {
-      return 'aqua'; 
+      return 'aqua'; // Point is on the PPF curve
     }
 
     if (scaledQuantityB < expectedQuantityB) {
-      return 'red';
+      return 'red'; // Point is inside the PPF curve
     }
   }
-  
+
   return 'blue';
 }
+
+var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+dot.setAttribute('cx', dotX);
+dot.setAttribute('cy', dotY);
+dot.setAttribute('r', '5');
+var dotColor = getDotColor(quantityA, quantityB);
+dot.setAttribute('fill', dotColor);
+dot.classList.add('breathing-dot'); 
+axes.appendChild(dot);
+
   </script>
 </body>
 </html>
