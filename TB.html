@@ -131,12 +131,10 @@ const table = document.querySelector("table");
 const checkBalanceButton = document.querySelector("#check-balance");
 
 checkBalanceButton.addEventListener("click", function() {
-  // Find all the rows in the table
   let rows = table.querySelectorAll("tr");
   let debitTotal = 0;
   let creditTotal = 0;
 
-  // Calculate the total of the debit and credit columns
   for (let i = 0; i < rows.length; i++) {
     let debit = parseFloat(rows[i].querySelector(".debit").innerText);
     let credit = parseFloat(rows[i].querySelector(".credit").innerText);
@@ -147,8 +145,7 @@ checkBalanceButton.addEventListener("click", function() {
       creditTotal += credit;
     }
   }
-
-  // Create a new row with the totals
+  
   let newRow = table.insertRow();
   let snCell = newRow.insertCell();
   snCell.innerText = "*";
@@ -161,7 +158,6 @@ checkBalanceButton.addEventListener("click", function() {
   creditCell.innerText = creditTotal;
   creditCell.classList.add("credit");
 
-  // Display the notifications
   let debitNotification = document.querySelector("#debit-total");
   debitNotification.innerText = "Debit Total: " + debitTotal;
   let creditNotification = document.querySelector("#credit-total");
@@ -173,7 +169,6 @@ checkBalanceButton.addEventListener("click", function() {
 <script>
 document.getElementById("clear").onclick = function() {
 
-  // Clear the notification
   var notification = document.getElementById("notification");
   notification.innerHTML = "";
   notification.className = "notification";
