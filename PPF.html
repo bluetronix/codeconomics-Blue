@@ -111,6 +111,7 @@
      transform: scale(1.2);
     }
     }
+
   </style>
 </head>
 <body>
@@ -126,16 +127,16 @@
   <div class="draw-button">
     <button onclick="drawCurve()">PLOT PP</button>
   </div>
+
   <svg id="ppf" width="800" height="600"></svg>
   <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">[CETERIS PARIBUS]</div>
-
+  
   <script>
-    
     var ppfData = [
       { x: 0, y: 850 },
       { x: 850, y: 0 },  
     ];
-    
+
     var svg = document.getElementById('ppf');
 
     var axes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -206,7 +207,7 @@
       gridLinesY.forEach(function (line) {
         line.style.display = 'block';
       });
-
+      
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       var pathPoints = [];
 
@@ -222,7 +223,7 @@
       path.setAttribute('stroke', 'aqua');
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
-
+      
       for (var j = 0; j <= 1000; j += 50) {
         var tickX = 50 + (j * scaleFactorX);
         var tickY = 550 - (j * scaleFactorY);
@@ -297,7 +298,7 @@
       intersectionLineY.setAttribute('stroke-dasharray', '5, 5');
       axes.appendChild(intersectionLineY);
     }
-
+    
 function getDotColor(quantityA, quantityB) {
   var scaleFactorX = (750 - 50) / 1000;
   var scaleFactorY = (550 - 20) / 1000;
@@ -312,18 +313,16 @@ function getDotColor(quantityA, quantityB) {
 
     var ppfSlope = (y2 - y1) / (x2 - x1);
     var ppfYIntercept = y1 - ppfSlope * x1;
-
+    
     var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
 
     if (scaledQuantityB === expectedQuantityB) {
-      return 'aqua'; // Point is on the PPF curve
-    }
+      return 'aqua'; 
 
     if (scaledQuantityB < expectedQuantityB) {
-      return 'red'; // Point is inside the PPF curve
+      return 'red';
     }
   }
-
   return 'blue';
 }
 
@@ -334,7 +333,6 @@ dot.setAttribute('r', '5');
 var dotColor = getDotColor(quantityA, quantityB);
 dot.setAttribute('fill', dotColor);
 dot.classList.add('breathing-dot'); 
-axes.appendChild(dot);
 
   </script>
 </body>
