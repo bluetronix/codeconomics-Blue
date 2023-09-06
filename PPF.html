@@ -27,19 +27,21 @@
       font-size: 20px;
       font-weight: bold;
       margin-top: 10px;
-      animation: colorAnimation 0.5s infinite;
+      animation: colorAnimation 5s infinite;
     }
 
     @keyframes colorAnimation {
-      40% { color: aqua; }
-      30% { color: yellow; }
-      30% { color: blue; }
+      0% { color: blue; }
+      25% { color: aqua; }
+      50% { color: blue; }
+      75% { color: aqua; }
+      100% { color: blue; }
     }
 
     h1 {
       text-align: center;
       text-transform: capitalize;
-      animation: colorAnimation 0.5s infinite;
+      animation: colorAnimation 5s infinite;
       text-decoration: underline;
     }
 
@@ -114,19 +116,15 @@
   <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">[CETERIS PARIBUS]</div>
 
   <script>
-    // Define the data points for the PPF curve
     var ppfData = [
       { x: 0, y: 250 },
       { x: 250, y: 0 },  
     ];
 
-    // Get the SVG element
     var svg = document.getElementById('ppf');
 
-    // Draw the axes and grid lines
     var axes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
-    // X-axis
     var xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     xAxis.setAttribute('x1', '50');
     xAxis.setAttribute('y1', '550');
@@ -135,7 +133,6 @@
     xAxis.setAttribute('stroke', 'aqua');
     axes.appendChild(xAxis);
 
-    // Y-axis
     var yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     yAxis.setAttribute('x1', '50');
     yAxis.setAttribute('y1', '550');
@@ -144,7 +141,6 @@
     yAxis.setAttribute('stroke', 'aqua');
     axes.appendChild(yAxis);
 
-    // Label for GOOD A
     var goodALabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     goodALabel.setAttribute('class', 'label');
     goodALabel.setAttribute('x', '780');
@@ -153,7 +149,6 @@
     goodALabel.textContent = 'GOOD A';
     axes.appendChild(goodALabel);
 
-    // Label for GOOD B
     var goodBLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     goodBLabel.setAttribute('class', 'label');
     goodBLabel.setAttribute('x', '80');
@@ -164,7 +159,6 @@
 
     svg.appendChild(axes);
 
-    // Function to draw the PPF curve and intersection lines
     function drawCurve() {
       var quantityA = parseInt(document.getElementById('quantity-a').value);
       var quantityB = parseInt(document.getElementById('quantity-b').value);
@@ -182,13 +176,11 @@
       var scaleFactorX = (750 - 50) / 350;
       var scaleFactorY = (550 - 20) / 350;
 
-      // Redraw the axes and grid lines
       axes.appendChild(xAxis);
       axes.appendChild(yAxis);
       axes.appendChild(goodALabel);
       axes.appendChild(goodBLabel);
 
-      // Show grid lines
       var gridLinesX = document.querySelectorAll('.grid-line-x');
       var gridLinesY = document.querySelectorAll('.grid-line-y');
 
@@ -200,7 +192,6 @@
         line.style.display = 'block';
       });
 
-      // Create the path for the curve
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       var pathPoints = [];
 
@@ -255,7 +246,6 @@
         axes.appendChild(tickLabelY);
       }
 
-      // Plot the input values as a dot on the graph
       var dotX = 50 + (quantityA * scaleFactorX);
       var dotY = 550 - (quantityB * scaleFactorY);
 
@@ -267,7 +257,6 @@
       dot.setAttribute('fill', dotColor);
       axes.appendChild(dot);
 
-      // Draw dotted lines to the intersection point
       var intersectionLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       intersectionLineX.setAttribute('x1', dotX);
       intersectionLineX.setAttribute('y1', dotY);
@@ -287,37 +276,32 @@
       axes.appendChild(intersectionLineY);
     }
 
-   // Function to determine the dot color based on quantity values
 function getDotColor(quantityA, quantityB) {
   var scaleFactorX = (750 - 50) / 350;
   var scaleFactorY = (550 - 20) / 350;
   var scaledQuantityA = 50 + (quantityA * scaleFactorX);
   var scaledQuantityB = 550 - (quantityB * scaleFactorY);
 
-  // Check if the dot is within or outside the PPF curve
   for (var i = 0; i < ppfData.length - 1; i++) {
     var x1 = 50 + (ppfData[i].x * scaleFactorX);
     var y1 = 550 - (ppfData[i].y * scaleFactorY);
     var x2 = 50 + (ppfData[i + 1].x * scaleFactorX);
     var y2 = 550 - (ppfData[i + 1].y * scaleFactorY);
 
-    // Calculate the equation of the line segment between two PPF points
     var ppfSlope = (y2 - y1) / (x2 - x1);
     var ppfYIntercept = y1 - ppfSlope * x1;
 
-    // Calculate the expected quantity of Good B for the given quantity of Good A
     var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
 
     if (scaledQuantityB === expectedQuantityB) {
-      return 'aqua'; // Point is on the PPF curve
+      return 'aqua'; 
     }
 
     if (scaledQuantityB < expectedQuantityB) {
-      return 'red'; // Point is inside the PPF curve
+      return 'red';
     }
   }
-
-  // Dot is outside the PPF curve
+  
   return 'blue';
 }
   </script>
