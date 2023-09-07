@@ -51,7 +51,7 @@ button:hover {
   </style>
 </head>
 <body>
-  <h1>MATIKO'S SIMPLE EXPENSE TRACKER</h1>
+  <h1>MATIKO'S SIMPLE EXPENSE TRACKER:</h1>
   <table>
     <thead>
       <tr>
@@ -64,12 +64,16 @@ button:hover {
     </tbody>
     <style>
       h1{
-    animation: colorAnimation 0.5s infinite;
+    animation: colorAnimation 5s infinite;
+    text-decoration: underline;
+    font-size: 40px;
   }
     @keyframes colorAnimation {
-      40% { color: aqua; }
-      30% { color: yellow; }
-      30% { color: blue; }
+      0% { color: blue; }
+      25% { color: aqua; }
+      50% { color: blue; }
+      75% { color: aqua; }
+      100% { color: blue; }
     }
     </style>
   </table>
@@ -94,7 +98,7 @@ button:hover {
         row.insertCell().innerHTML = date;
         row.insertCell().innerHTML = amount.toFixed(2);
       } else {
-        alert("Please enter valid values for all fields.");
+        alert("PLEASE ENTER VALID VALUES FOR ALL INPUT FIELDS!");
       }
     });
 
