@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR</title>
   <style>
@@ -31,11 +32,25 @@
     }
 
     @keyframes colorAnimation {
-      0% { color: blue; }
-      25% { color: aqua; }
-      50% { color: blue; }
-      75% { color: aqua; }
-      100% { color: blue; }
+      0% {
+        color: blue;
+      }
+
+      25% {
+        color: aqua;
+      }
+
+      50% {
+        color: blue;
+      }
+
+      75% {
+        color: aqua;
+      }
+
+      100% {
+        color: blue;
+      }
     }
 
     h1 {
@@ -70,7 +85,7 @@
       font-size: 25px;
       font-family: 'Times New Roman';
       background-color: blue;
-      color:white;
+      color: white;
       border: none;
       cursor: pointer;
       border-radius: 300rem;
@@ -89,14 +104,14 @@
 
     .grid-line-x {
       stroke: white;
-      stroke-dasharray: 5, 5; 
-      display: none; 
+      stroke-dasharray: 5, 5;
+      display: none;
     }
 
     .grid-line-y {
       stroke: white;
-      stroke-dasharray: 5, 5; 
-      display: none; 
+      stroke-dasharray: 5, 5;
+      display: none;
     }
 
     .breathing-dot {
@@ -104,16 +119,17 @@
     }
 
     @keyframes breathe {
-     0% {
-      transform: scale(1);
-    }
-      100% {
-     transform: scale(1.2);
-    }
-    }
+      0% {
+        transform: scale(1);
+      }
 
+      100% {
+        transform: scale(1.2);
+      }
+    }
   </style>
 </head>
+
 <body>
   <h1>MATIKO'S PRODUCTION POSSIBILITY FRONTIER(PPF) SIMULATOR:</h1>
   <div class="input-container">
@@ -130,11 +146,11 @@
 
   <svg id="ppf" width="800" height="600"></svg>
   <div class="ceteris-paribus" style="font-size: x-large; font-family: times new roman;">[CETERIS PARIBUS]</div>
-  
+
   <script>
     var ppfData = [
       { x: 0, y: 850 },
-      { x: 850, y: 0 },  
+      { x: 850, y: 0 },
     ];
 
     var svg = document.getElementById('ppf');
@@ -192,11 +208,6 @@
       var scaleFactorX = (750 - 50) / 1000;
       var scaleFactorY = (550 - 20) / 1000;
 
-      axes.appendChild(xAxis);
-      axes.appendChild(yAxis);
-      axes.appendChild(goodALabel);
-      axes.appendChild(goodBLabel);
-
       var gridLinesX = document.querySelectorAll('.grid-line-x');
       var gridLinesY = document.querySelectorAll('.grid-line-y');
 
@@ -207,7 +218,7 @@
       gridLinesY.forEach(function (line) {
         line.style.display = 'block';
       });
-      
+
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       var pathPoints = [];
 
@@ -223,7 +234,7 @@
       path.setAttribute('stroke', 'aqua');
       path.setAttribute('fill', 'none');
       axes.appendChild(path);
-      
+
       for (var j = 0; j <= 1000; j += 50) {
         var tickX = 50 + (j * scaleFactorX);
         var tickY = 550 - (j * scaleFactorY);
@@ -260,7 +271,7 @@
         tickLabelY.textContent = j.toString();
         axes.appendChild(tickLabelY);
       }
-      
+
       var dotX = 50 + (quantityA * scaleFactorX);
       var dotY = 550 - (quantityB * scaleFactorY);
 
@@ -272,14 +283,14 @@
       dot.setAttribute('fill', dotColor);
       axes.appendChild(dot);
 
-  setInterval(function () {
-    if (dot.getAttribute('r') === '5') {
-      dot.setAttribute('r', '6');
-    } else {
-      dot.setAttribute('r', '5');
-    }
-  }, 1000);
-      
+      setInterval(function () {
+        if (dot.getAttribute('r') === '5') {
+          dot.setAttribute('r', '6');
+        } else {
+          dot.setAttribute('r', '5');
+        }
+      }, 1000);
+
       var intersectionLineX = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       intersectionLineX.setAttribute('x1', dotX);
       intersectionLineX.setAttribute('y1', dotY);
@@ -298,42 +309,34 @@
       intersectionLineY.setAttribute('stroke-dasharray', '5, 5');
       axes.appendChild(intersectionLineY);
     }
-    
-function getDotColor(quantityA, quantityB) {
-  var scaleFactorX = (750 - 50) / 1000;
-  var scaleFactorY = (550 - 20) / 1000;
-  var scaledQuantityA = 50 + (quantityA * scaleFactorX);
-  var scaledQuantityB = 550 - (quantityB * scaleFactorY);
 
-  for (var i = 0; i < ppfData.length - 1; i++) {
-    var x1 = 50 + (ppfData[i].x * scaleFactorX);
-    var y1 = 550 - (ppfData[i].y * scaleFactorY);
-    var x2 = 50 + (ppfData[i + 1].x * scaleFactorX);
-    var y2 = 550 - (ppfData[i + 1].y * scaleFactorY);
+    function getDotColor(quantityA, quantityB) {
+      var scaleFactorX = (750 - 50) / 1000;
+      var scaleFactorY = (550 - 20) / 1000;
+      var scaledQuantityA = 50 + (quantityA * scaleFactorX);
+      var scaledQuantityB = 550 - (quantityB * scaleFactorY);
 
-    var ppfSlope = (y2 - y1) / (x2 - x1);
-    var ppfYIntercept = y1 - ppfSlope * x1;
-    
-    var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
+      for (var i = 0; i < ppfData.length - 1; i++) {
+        var x1 = 50 + (ppfData[i].x * scaleFactorX);
+        var y1 = 550 - (ppfData[i].y * scaleFactorY);
+        var x2 = 50 + (ppfData[i + 1].x * scaleFactorX);
+        var y2 = 550 - (ppfData[i + 1].y * scaleFactorY);
 
-    if (scaledQuantityB === expectedQuantityB) {
-      return 'aqua'; 
+        var ppfSlope = (y2 - y1) / (x2 - x1);
+        var ppfYIntercept = y1 - ppfSlope * x1;
 
-    if (scaledQuantityB < expectedQuantityB) {
-      return 'red';
+        var expectedQuantityB = ppfSlope * scaledQuantityA + ppfYIntercept;
+
+        if (scaledQuantityB === expectedQuantityB) {
+          return 'aqua';
+        }
+
+        if (scaledQuantityB < expectedQuantityB) {
+          return 'red';
+        }
+      }
+      return 'blue';
     }
-  }
-  return 'blue';
-}
-
-var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-dot.setAttribute('cx', dotX);
-dot.setAttribute('cy', dotY);
-dot.setAttribute('r', '5');
-var dotColor = getDotColor(quantityA, quantityB);
-dot.setAttribute('fill', dotColor);
-dot.classList.add('breathing-dot'); 
-
   </script>
 </body>
 </html>
