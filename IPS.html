@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Plan Calculator</title>
+    <title>MATIKO'S INVESTMENT CALCULATOR</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -67,7 +67,7 @@
 
         #expenditure-chart {
             width: 80%;
-            max-width: 800px; /* Added maximum width for better visibility */
+            max-width: 800px;
             margin: 0 auto;
         }
     </style>
@@ -88,12 +88,11 @@
     </div>
     <button onclick="calculateExpenditure()">Calculate</button>
     <div>
-        <h2>Investment Plan Graph</h2>
+        <h2>INVESTMENT PLAN GRAPH:</h2>
         <canvas id="expenditure-chart"></canvas>
     </div>
 
     <script>
-        // Initialize Chart.js
         const ctx = document.getElementById('expenditure-chart').getContext('2d');
         let expenditureChart;
 
